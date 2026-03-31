@@ -1,27 +1,138 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+
+import '../models/app_user.dart';
+import 'api_client.dart';
+import 'service_utils.dart';
 
 class AuthService extends ChangeNotifier {
-  bool _loggedIn = false;
-  String? _username;
+  AuthService(this._apiClient);
 
-  bool get isLoggedIn => _loggedIn;
-  String? get username => _username;
+  final ApiClient _apiClient;
+  AppUser? _user;
 
-  Future<bool> login(String username, String password) async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    // demo fake auth: accept any username with password 'password'
-    if (password == 'password') {
-      _loggedIn = true;
-      _username = username;
-      notifyListeners();
-      return true;
-    }
-    return false;
+  Future<void> updateLocale(String locale) async {
+    await _apiClient.putJson('/api/users/locale', {'locale': locale});
+    await refreshMe(silent: true);
   }
 
-  void logout() {
-    _loggedIn = false;
-    _username = null;
+  bool _isLoading = false;
+
+  AppUser? get user => _user;
+  bool get isLoading => _isLoading;
+  bool get isLoggedIn => _user != null;
+
+  AppUser _readUser(Map<String, dynamic> response) {
+    return jsonModel(response, 'user', AppUser.fromJson);
+  }
+
+  Future<void> _writeAndRefresh(
+    Future<Map<String, dynamic>> Function() request,
+  ) async {
+    await request();
+    await refreshMe(silent: true);
+  }
+
+  Future<void> init() async {
+    await refreshMe(silent: true);
+  }
+
+  Future<void> refreshMe({bool silent = false}) async {
+    _setLoading(!silent);
+    try {
+      final res = await _apiClient.getJson('/api/me');
+      _user = _readUser(res);
+    } catch (_) {
+      _user = null;
+    } finally {
+      _setLoading(false);
+      notifyListeners();
+    }
+  }
+
+  Future<void> verifyGoogleToken(String idToken) async {
+    _setLoading(true);
+    try {
+      final res = await _apiClient.postJson('/api/google-login', {
+        'id_token': idToken,
+      });
+      _saveUser(res);
+    } catch (_) {
+      _user = null;
+      rethrow;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  Future<void> updateProfile({
+    required String name,
+    required String bio,
+    required String avatarSource,
+    required String customAvatarUrl,
+  }) async {
+    await _writeAndRefresh(
+      () => _apiClient.putJson('/api/users/me', {
+        'name': name,
+        'bio': bio,
+        'avatar_source': avatarSource,
+        'custom_avatar_url': customAvatarUrl,
+      }),
+    );
+  }
+
+  Future<void> uploadAvatarImage({
+    required String bytesBase64,
+    required String contentType,
+    String? fileName,
+  }) async {
+    await _writeAndRefresh(
+      () => _apiClient.postJson('/api/users/me/avatar-image', {
+        'bytesBase64': bytesBase64,
+        'contentType': contentType,
+        'fileName': fileName,
+      }),
+    );
+  }
+
+  Future<void> deleteAvatarImage() async {
+    await _writeAndRefresh(
+      () => _apiClient.deleteJson('/api/users/me/avatar-image'),
+    );
+  }
+
+  Future<void> updateThemeMode(String themeMode) async {
+    await _writeAndRefresh(
+      () => _apiClient.putJson('/api/users/theme-mode', {
+        'theme_mode': themeMode,
+      }),
+    );
+  }
+
+  Future<void> updateFontSizeScale(double scale) async {
+    await _writeAndRefresh(
+      () => _apiClient.putJson('/api/users/ui-preferences', {
+        'font_size_scale': scale,
+      }),
+    );
+  }
+
+  Future<void> logout() async {
+    try {
+      await _apiClient.postJson('/api/logout', {});
+    } catch (_) {
+      // Ignore API failures when logging out locally.
+    }
+    _user = null;
+    notifyListeners();
+  }
+
+  void _saveUser(Map<String, dynamic> response) {
+    _user = _readUser(response);
+    notifyListeners();
+  }
+
+  void _setLoading(bool value) {
+    _isLoading = value;
     notifyListeners();
   }
 }
