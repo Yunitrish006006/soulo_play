@@ -475,7 +475,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                                 const SizedBox(height: 18),
                                 DropdownButtonFormField<String>(
-                                  value: _avatarSource,
+                                  initialValue: _avatarSource,
                                   decoration: InputDecoration(
                                     labelText: t.text('Avatar source'),
                                   ),
