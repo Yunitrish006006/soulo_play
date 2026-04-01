@@ -16,7 +16,8 @@ class HomePage extends StatelessWidget {
       return Scaffold(
         body: Center(
           child: FilledButton(
-            onPressed: () => Navigator.of(context).pushReplacementNamed('/login'),
+            onPressed: () =>
+                Navigator.of(context).pushReplacementNamed('/login'),
             child: Text(t.text('Please log in first')),
           ),
         ),
@@ -111,7 +112,10 @@ class HomePage extends StatelessWidget {
                   ),
                   _InfoCard(
                     title: t.text('Session status'),
-                    lines: const ['Google session cookie active', '/api/me ready'],
+                    lines: const [
+                      'Google session cookie active',
+                      '/api/me ready',
+                    ],
                     icon: Icons.verified_user_outlined,
                   ),
                 ],
@@ -130,10 +134,32 @@ class HomePage extends StatelessWidget {
                       SizedBox(
                         width: cardWidth,
                         child: _ActionCard(
+                          title: '活動報名',
+                          subtitle: '查看目前開放活動',
+                          icon: Icons.event_available_outlined,
+                          onTap: () =>
+                              Navigator.of(context).pushNamed('/events'),
+                        ),
+                      ),
+                      SizedBox(
+                        width: cardWidth,
+                        child: _ActionCard(
+                          title: '我的報名',
+                          subtitle: '查看審核與付款狀態',
+                          icon: Icons.receipt_long_outlined,
+                          onTap: () => Navigator.of(
+                            context,
+                          ).pushNamed('/my-registrations'),
+                        ),
+                      ),
+                      SizedBox(
+                        width: cardWidth,
+                        child: _ActionCard(
                           title: t.text('Profile'),
                           subtitle: t.text('Open profile'),
                           icon: Icons.person_outline,
-                          onTap: () => Navigator.of(context).pushNamed('/profile'),
+                          onTap: () =>
+                              Navigator.of(context).pushNamed('/profile'),
                         ),
                       ),
                       SizedBox(
@@ -142,7 +168,8 @@ class HomePage extends StatelessWidget {
                           title: t.text('Preferences'),
                           subtitle: t.text('Open settings'),
                           icon: Icons.tune,
-                          onTap: () => Navigator.of(context).pushNamed('/settings'),
+                          onTap: () =>
+                              Navigator.of(context).pushNamed('/settings'),
                         ),
                       ),
                     ],

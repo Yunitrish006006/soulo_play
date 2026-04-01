@@ -6,6 +6,9 @@ import 'pages/general/auth_page.dart';
 import 'pages/general/splash_page.dart';
 import 'pages/home/home_page.dart';
 import 'pages/profile/profile_page.dart';
+import 'pages/registration/events_page.dart';
+import 'pages/registration/my_registrations_page.dart';
+import 'pages/registration/participant_profile_page.dart';
 import 'pages/settings/settings_page.dart';
 import 'services/api_client.dart';
 import 'services/auth_service.dart';
@@ -88,6 +91,9 @@ class MainApp extends StatelessWidget {
             '/login': (_) => const AuthPage(),
             '/home': (_) => const HomePage(),
             '/profile': (_) => const ProfilePage(),
+            '/participant-profile': (_) => const ParticipantProfilePage(),
+            '/events': (_) => const EventsPage(),
+            '/my-registrations': (_) => const MyRegistrationsPage(),
             '/settings': (_) => const SettingsPage(),
           },
         );
