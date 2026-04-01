@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../services/auth_service.dart';
 import '../../services/locale_provider.dart';
+import '../../widgets/soulo_wordmark.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -25,6 +26,7 @@ class HomePage extends StatelessWidget {
     }
 
     final theme = Theme.of(context);
+    final wordmarkHeight = MediaQuery.sizeOf(context).width < 560 ? 50.0 : 70.0;
     return Scaffold(
       appBar: AppBar(
         title: Text(t.text('Portal Home')),
@@ -62,22 +64,32 @@ class HomePage extends StatelessWidget {
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      theme.colorScheme.primaryContainer,
-                      theme.colorScheme.secondaryContainer,
-                    ],
+                    colors: [const Color(0xFF0C8A83), const Color(0xFF0A615C)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(28),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color.fromRGBO(12, 138, 131, 0.18),
+                      blurRadius: 30,
+                      offset: const Offset(0, 16),
+                    ),
+                  ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SouloWordmark(
+                      lightVariant: true,
+                      wordHeight: wordmarkHeight,
+                    ),
+                    const SizedBox(height: 16),
                     Text(
                       t.text('Welcome back'),
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.w800,
+                        color: Colors.white70,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -85,6 +97,7 @@ class HomePage extends StatelessWidget {
                       user.name,
                       style: theme.textTheme.displaySmall?.copyWith(
                         fontWeight: FontWeight.w900,
+                        color: Colors.white,
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -92,7 +105,9 @@ class HomePage extends StatelessWidget {
                       t.text(
                         'Manage your account, preferences, and future social systems from one portal.',
                       ),
-                      style: theme.textTheme.bodyLarge,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: const Color.fromRGBO(255, 255, 255, 0.88),
+                      ),
                     ),
                   ],
                 ),

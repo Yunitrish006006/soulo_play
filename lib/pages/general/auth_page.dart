@@ -10,6 +10,7 @@ import '../../constants/app_constants.dart';
 import '../../services/api_client.dart';
 import '../../services/auth_service.dart';
 import '../../services/locale_provider.dart';
+import '../../widgets/soulo_wordmark.dart';
 import '../../utils/snackbar.dart';
 
 class AuthPage extends StatefulWidget {
@@ -55,9 +56,7 @@ class _AuthPageState extends State<AuthPage> {
     }
 
     try {
-      await _googleSignIn.initialize(
-        clientId: AppConstants.googleWebClientId,
-      );
+      await _googleSignIn.initialize(clientId: AppConstants.googleWebClientId);
 
       _googleAuthSubscription = _googleSignIn.authenticationEvents.listen((
         event,
@@ -247,9 +246,11 @@ class _AuthPageState extends State<AuthPage> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SouloWordmark(wordHeight: 44),
+                    const SizedBox(height: 12),
                     Text(
                       t.text('Soulo Play Portal'),
-                      style: theme.textTheme.headlineMedium?.copyWith(
+                      style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w800,
                       ),
                     ),
