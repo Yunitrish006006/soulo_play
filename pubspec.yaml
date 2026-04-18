@@ -1,7 +1,7 @@
 name: soulo_play
 description: "A new Flutter project."
 publish_to: 'none'
-version: 0.6.0
+version: 0.7.0
 
 environment:
   sdk: ^3.11.1
@@ -14,6 +14,7 @@ dependencies:
   google_sign_in_web: ^1.1.2
   http: ^1.6.0
   provider: ^6.1.5+1
+  user_ui_settings: ^0.1.0
 
 dev_dependencies:
   flutter_test:

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:user_ui_settings/user_ui_settings.dart';
 
 import '../services/api_client.dart';
 import '../services/auth_service.dart';
-import '../services/theme_provider.dart';
-import '../services/ui_settings_provider.dart';
-import '../services/locale_provider.dart';
 import '../utils/snackbar.dart';
 
 class SettingsPanel extends StatelessWidget {

@@ -10,11 +10,11 @@ import 'pages/registration/events_page.dart';
 import 'pages/registration/my_registrations_page.dart';
 import 'pages/registration/participant_profile_page.dart';
 import 'pages/settings/settings_page.dart';
+import 'package:user_ui_settings/user_ui_settings.dart';
+
+import 'constants/locale_catalog.dart';
 import 'services/api_client.dart';
 import 'services/auth_service.dart';
-import 'services/locale_provider.dart';
-import 'services/theme_provider.dart';
-import 'services/ui_settings_provider.dart';
 
 void main() {
   final apiClient = ApiClient();
@@ -26,7 +26,10 @@ void main() {
           create: (_) => ThemeProvider(),
           update: (_, auth, themeProvider) {
             final provider = themeProvider ?? ThemeProvider();
-            provider.syncFromUser(auth.user);
+            provider.syncForUser(
+              auth.user?.id,
+              themeMode: auth.user?.themeMode,
+            );
             return provider;
           },
         ),
@@ -34,15 +37,26 @@ void main() {
           create: (_) => UiSettingsProvider(),
           update: (_, auth, uiSettingsProvider) {
             final provider = uiSettingsProvider ?? UiSettingsProvider();
-            provider.syncFromUser(auth.user);
+            provider.syncForUser(
+              auth.user?.id,
+              fontScale: auth.user?.fontSizeScale,
+            );
             return provider;
           },
         ),
         ChangeNotifierProxyProvider<AuthService, LocaleProvider>(
-          create: (_) => LocaleProvider(),
+          create: (_) => LocaleProvider(
+            defaultLocale: defaultLocaleCode,
+            translationResolver: translationForLocale,
+          ),
           update: (_, auth, localeProvider) {
-            final provider = localeProvider ?? LocaleProvider();
-            provider.syncFromUser(auth.user);
+            final provider =
+                localeProvider ??
+                LocaleProvider(
+                  defaultLocale: defaultLocaleCode,
+                  translationResolver: translationForLocale,
+                );
+            provider.syncForUser(auth.user?.id, locale: auth.user?.locale);
             return provider;
           },
         ),

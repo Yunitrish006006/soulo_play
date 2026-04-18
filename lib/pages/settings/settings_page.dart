@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/locale_provider.dart';
+import 'package:user_ui_settings/user_ui_settings.dart';
 import '../../widgets/settings_panel.dart';
 
 class SettingsPage extends StatelessWidget {

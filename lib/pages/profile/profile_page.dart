@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../../models/app_user.dart';
 import '../../services/api_client.dart';
 import '../../services/auth_service.dart';
-import '../../services/locale_provider.dart';
+import 'package:user_ui_settings/user_ui_settings.dart';
 import '../../utils/snackbar.dart';
 import '../../widgets/settings_panel.dart';
 

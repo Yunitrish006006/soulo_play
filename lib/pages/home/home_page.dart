@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/auth_service.dart';
-import '../../services/locale_provider.dart';
+import 'package:user_ui_settings/user_ui_settings.dart';
 import '../../widgets/soulo_wordmark.dart';
 
 class HomePage extends StatelessWidget {
